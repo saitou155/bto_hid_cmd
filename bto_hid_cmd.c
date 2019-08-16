@@ -227,13 +227,6 @@ int transfer_ir(hid_device* device, char *data, int length, int extend) {
 		return -1;
 	}
 
-	usleep(100 * 1000);
-
-	ret = clear_device_buffer(device);
-	if(ret < 0)
-	{
-		return -1;
-	}
 	return 0;
 }
 
@@ -246,7 +239,7 @@ int close_device(hid_device* device) {
 	return 0;
 }
 
-hid_device* _open_device(int nDevNo)
+hid_device* open_device(int nDevNo)
 {
 	hid_device* device = NULL;
 	int i = -1;
@@ -279,29 +272,6 @@ EXIT_PATH:
 	if(info != NULL)
 	{
 		hid_free_enumeration(info);
-	}
-	return device;
-}
-
-hid_device* open_device(int nDevNo) {
-	int i;
-	int ret;
-	hid_device* device = NULL;
-	for(i = 0;i < 100;i++)
-	{
-		device = _open_device(0);
-		if(device == NULL)
-		{
-			continue;
-		}
-		ret = clear_device_buffer(device);
-		if(ret < 0)
-		{
-			close_device(device);
-			device = NULL;
-			continue;
-		}
-		break;
 	}
 	return device;
 }
